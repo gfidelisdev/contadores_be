@@ -1,6 +1,18 @@
 const knex = require("./database/database")
 
 const Counters = {
+  formatDate: function (dt) {
+    let year = dt.getFullYear()
+    let month = `0${dt.getMonth() + 1}`
+    month = month.slice(-2)
+    let day = `0${dt.getDate()}`
+    day = day.slice(-2)
+    let hour = `0${dt.getHours()}`
+    hour = hour.slice(-2)
+    let minute = `0${dt.getMinutes()}`
+    minute = minute.slice(-2)
+    return `${hour}:${minute} ${day}/${month}/${year}`
+  },
   list: async (req, res) => {
     // Busca os dados de ano e mês para a checagem
     year = parseInt(req.body.year)
@@ -54,6 +66,8 @@ const Counters = {
         totalCopies =
           endCounters["total_copies"] - startCounters["total_copies"]
         totalScans = endCounters["total_scans"] - startCounters["total_scans"]
+        startTime = Counters.formatDate(startCounters["created_at"])
+        endTime = Counters.formatDate(endCounters["created_at"])
         return {
           ...printer,
           startCounters: { ...startCounters },
@@ -61,6 +75,8 @@ const Counters = {
           totalPrints,
           totalCopies,
           totalScans,
+          startTime,
+          endTime,
         }
       })
     )
