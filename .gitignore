@@ -1,0 +1,5 @@
+.env
+yarn-error.log
+yarn.lock
+.vscode/
+node_modules/
