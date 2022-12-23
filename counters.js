@@ -39,6 +39,19 @@ const Counters = {
             msg: `Não há dados para o período informado para a impressora com SN: ${printer["sn"]} e IP: ${printer["ip"]}`,
           }
         }
+
+        if (startCounters["created_at"].getFullYear() > initialYear) {
+          return {
+            msg: `Não há dados para o período informado para a impressora com SN: ${printer["sn"]} e IP: ${printer["ip"]}`,
+          }
+        }
+
+        if (startCounters["created_at"].getMonth() + 1 > initialMonth) {
+          return {
+            msg: `Não há dados para o período informado para a impressora com SN: ${printer["sn"]} e IP: ${printer["ip"]}`,
+          }
+        }
+
         let endCounters = await knex("counters")
           .where("printer_id", printer.id)
           .andWhere("created_at", ">", `${finalYear}-${finalMonth}-01 00:00:00`)
@@ -61,6 +74,7 @@ const Counters = {
 
           endCounters = endCounters.map((eC) => ({ ...eC }))[0]
         }
+
         totalPrints =
           endCounters["total_prints"] - startCounters["total_prints"]
         totalCopies =
