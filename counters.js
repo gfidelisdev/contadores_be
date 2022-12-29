@@ -36,18 +36,24 @@ const Counters = {
           .first()
         if (!startCounters) {
           return {
+            sn: printer["sn"],
+            ip: printer["ip"],
             msg: `Não há dados para o período informado para a impressora com SN: ${printer["sn"]} e IP: ${printer["ip"]}`,
           }
         }
 
         if (startCounters["created_at"].getFullYear() > initialYear) {
           return {
+            sn: printer["sn"],
+            ip: printer["ip"],
             msg: `Não há dados para o período informado para a impressora com SN: ${printer["sn"]} e IP: ${printer["ip"]}`,
           }
         }
 
         if (startCounters["created_at"].getMonth() + 1 > initialMonth) {
           return {
+            sn: printer["sn"],
+            ip: printer["ip"],
             msg: `Não há dados para o período informado para a impressora com SN: ${printer["sn"]} e IP: ${printer["ip"]}`,
           }
         }
