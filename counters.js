@@ -2,6 +2,7 @@ const knex = require("./database/database")
 
 const Counters = {
     formatDate: function (dt) {
+        console.log(dt)
         let year = dt.getFullYear()
         let month = `0${dt.getMonth() + 1}`
         month = month.slice(-2)
@@ -13,20 +14,34 @@ const Counters = {
         minute = minute.slice(-2)
         return `${hour}:${minute} ${day}/${month}/${year}`
     },
+    getNow: function(){
+        let dt = new Date()
+        return `${dt.getFullYear}-${dt.getMonth()+1}-${dt.getDate()} ${dt.getHours()}:${dt.getMinutes}:${dt.getSeconds}}`
+    },
     filter: async (req, res) => {
         printers = req.body.printers
         startTime = req.body.startTime
-        endTime = req.body.endTime
+        endTime = req.body.endTime?req.body.endTime:Counters.getNow()
 
-        console.table(printers)
+        console.warn(startTime)
+        console.warn(endTime)
+        console.warn(printers)
+        
+        printers = printers.map(printer=>{
+            if (typeof printer == "number"){
+                return {id:printer}
+            }
+            return printer
+        })
+
         let counters = await Promise.all(
             printers.map(async (printer) => {
-                console.log(printer.id)
                 let startCounters = await knex("counters")
                     .where("printer_id", printer.id)
                     .andWhere("created_at", ">=", startTime)
+                    .orderBy('created_at','asc')
                     .first()
-
+                console.log(startCounters)
                 if (!startCounters) {
                     return {
                         sn: printer["sn"],
@@ -40,16 +55,16 @@ const Counters = {
                     .orderBy("created_at", "desc")
                     .first()
 
-                console.table(startCounters)
-                console.table(endCounters)
                 let totalPrints =
                     endCounters["total_prints"] - startCounters["total_prints"]
                 let totalCopies =
                     endCounters["total_copies"] - startCounters["total_copies"]
                 let totalScans =
                     endCounters["total_scans"] - startCounters["total_scans"]
+
                 startTime = Counters.formatDate(startCounters["created_at"])
                 endTime = Counters.formatDate(endCounters["created_at"])
+
                 return {
                     ...printer,
                     startCounters: { ...startCounters },
