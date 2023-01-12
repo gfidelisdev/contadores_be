@@ -1,6 +1,6 @@
 const knex = require("./database/database");
 
-const Counters = {
+const Failures = {
   formatDate: function (dt) {
     console.log(dt);
     let year = dt.getFullYear();
@@ -23,10 +23,7 @@ const Counters = {
   filter: async (req, res) => {
     printers = req.body.printers;
     startTime = req.body.startTime;
-    endTime = req.body.endTime ? req.body.endTime : Counters.getNow();
-
-    console.warn(startTime);
-    console.warn(endTime);
+    endTime = req.body.endTime ? req.body.endTime : Failures.getNow();
     console.warn(printers);
 
     printers = printers.map((printer) => {
@@ -43,7 +40,6 @@ const Counters = {
           .andWhere("created_at", ">=", startTime)
           .orderBy("created_at", "asc")
           .first();
-        console.log(startCounters);
         if (!startCounters) {
           return {
             sn: printer["sn"],
@@ -70,8 +66,8 @@ const Counters = {
         let totalScans =
           endCounters["total_scans"] - startCounters["total_scans"];
 
-        startTime = Counters.formatDate(startCounters["created_at"]);
-        endTime = Counters.formatDate(endCounters["created_at"]);
+        startTime = Failures.formatDate(startCounters["created_at"]);
+        endTime = Failures.formatDate(endCounters["created_at"]);
 
         return {
           ...printer,
@@ -189,4 +185,4 @@ const Counters = {
   },
 };
 
-module.exports = Counters;
+module.exports = Failures;
