@@ -1,29 +1,12 @@
 const knex = require("./database/database");
+const helper = require('./helpers')
 
 const Failures = {
-  formatDate: function (dt) {
-    console.log(dt);
-    let year = dt.getFullYear();
-    let month = `0${dt.getMonth() + 1}`;
-    month = month.slice(-2);
-    let day = `0${dt.getDate()}`;
-    day = day.slice(-2);
-    let hour = `0${dt.getHours()}`;
-    hour = hour.slice(-2);
-    let minute = `0${dt.getMinutes()}`;
-    minute = minute.slice(-2);
-    return `${hour}:${minute} ${day}/${month}/${year}`;
-  },
-  getNow: function () {
-    let dt = new Date();
-    return `${dt.getFullYear}-${
-      dt.getMonth() + 1
-    }-${dt.getDate()} ${dt.getHours()}:${dt.getMinutes}:${dt.getSeconds}}`;
-  },
+
   filter: async (req, res) => {
     printers = req.body.printers;
     startTime = req.body.startTime;
-    endTime = req.body.endTime ? req.body.endTime : Failures.getNow();
+    endTime = req.body.endTime ? req.body.endTime : helper.getNow();
     console.warn(printers);
 
     printers = printers.map((printer) => {
@@ -66,8 +49,8 @@ const Failures = {
         let totalScans =
           endCounters["total_scans"] - startCounters["total_scans"];
 
-        startTime = Failures.formatDate(startCounters["created_at"]);
-        endTime = Failures.formatDate(endCounters["created_at"]);
+        startTime = helper.formatDate(startCounters["created_at"]);
+        endTime = helper.formatDate(endCounters["created_at"]);
 
         return {
           ...printer,
