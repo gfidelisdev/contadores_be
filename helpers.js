@@ -1,6 +1,5 @@
 const helper = {
     formatDate: function (dt) {
-        console.log("🚀 ~ file: helpers.js:3 ~ dt:", dt);
         let year = dt.getFullYear();
         let month = `0${dt.getMonth() + 1}`;
         month = month.slice(-2);
