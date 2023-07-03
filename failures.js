@@ -1,6 +1,6 @@
 const knex = require("./database/database")
 const helper = require("./helpers")
-const { getPrintersStatus } = require("./middlewares")
+const { getPrinterStatus } = require("./middlewares")
 const Printers = require("./printers")
 const Failures = {
     filter: async (req, res) => {
@@ -16,7 +16,7 @@ const Failures = {
             failure["printer"] = printers.find(
                 (printer) => printer["id"] === failure["printer_id"]
             )
-            failure["printer"]["printer_status"] = getPrintersStatus(
+            failure["printer"]["printer_status"] = getPrinterStatus(
                 failure["printer"]["ip"]
             )
             return failure
