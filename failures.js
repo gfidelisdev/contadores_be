@@ -17,10 +17,6 @@ const Failures = {
                     (printer) => printer["id"] === failure["printer_id"]
                 )
                 let status = await getPrinterStatus(failure["printer"]["ip"])
-                console.log(
-                    "🚀 ~ file: failures.js:22 ~ failures=failures.map ~ printer_status:",
-                    printer_status
-                )
                 failure["printer"]["status"] = status
                 return failure
             })
