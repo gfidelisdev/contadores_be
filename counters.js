@@ -1,5 +1,6 @@
 const knex = require("./database/database")
 const helper = require("./helpers")
+const { getPrinterStatus } = require("./middlewares")
 const Counters = {
     getTotals: (startCounters, endCounters) => {
         let totalPrints =
@@ -143,6 +144,7 @@ const Counters = {
                 }
                 let startTime = helper.formatDate(startCounters["created_at"])
                 let endTime = helper.formatDate(endCounters["created_at"])
+                let status = await getPrinterStatus(printer["ip"])
                 return {
                     ...printer,
                     startCounters: { ...startCounters },
@@ -155,6 +157,7 @@ const Counters = {
                     ...Counters.getTotals(startCounters, endCounters),
                     startTime,
                     endTime,
+                    status,
                 }
             })
         )
