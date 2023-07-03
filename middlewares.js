@@ -10,4 +10,4 @@ const getPrintersStatus = async (req, res, next) => {
     next()
 }
 
-module.exports = { getPrintersStatus, getPrintersStatus }
+module.exports = { getPrinterStatus, getPrintersStatus }
